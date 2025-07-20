@@ -134,7 +134,7 @@ end
 
 -- Setup sidebar keymaps
 local function setup_sidebar_keymaps(bufnr)
-	local opts = { noremap = true, silent = true, buffer = bufnr }
+	local opts = { noremap = true, silent = true }
 
 	-- Navigation
 	api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>lua require('codeium.views.sidebar').close()<cr>", opts)
@@ -160,7 +160,7 @@ end
 
 -- Setup input keymaps
 local function setup_input_keymaps(bufnr)
-	local opts = { noremap = true, silent = true, buffer = bufnr }
+	local opts = { noremap = true, silent = true }
 
 	-- Send message
 	api.nvim_buf_set_keymap(bufnr, "n", "<CR>", "<cmd>lua require('codeium.views.sidebar').send_message()<cr>", opts)
