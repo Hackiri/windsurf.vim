@@ -502,6 +502,103 @@ function Server:add_workspace()
 	end)
 end
 
+-- Chat functionality methods
+function Server:send_chat_message(message, context, callback)
+	if not self.enabled or not self.port then
+		return
+	end
+
+	local metadata = get_request_metadata()
+	local document = nil
+	
+	-- Get current document context if available
+	local bufnr = vim.api.nvim_get_current_buf()
+	if vim.api.nvim_buf_is_valid(bufnr) then
+		local filename = vim.api.nvim_buf_get_name(bufnr)
+		if filename ~= "" then
+			local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
+			table.insert(lines, "")
+			local text = table.concat(lines, util.get_newline(bufnr))
+			local filetype = vim.bo.filetype
+			local language = enums.languages[filetype] or enums.languages.unspecified
+			
+			document = {
+				editor_language = filetype,
+				language = language,
+				cursor_offset = 0,
+				text = text,
+				line_ending = util.get_newline(bufnr),
+				absolute_uri = util.get_uri(filename),
+				workspace_uri = util.get_uri(util.get_project_root()),
+			}
+		end
+	end
+
+	self:request("GetCompletions", {
+		metadata = metadata,
+		editor_options = {
+			tab_size = vim.bo.tabstop,
+			insert_spaces = vim.bo.expandtab,
+		},
+		document = document,
+		other_documents = {},
+		message = message,
+		context = context or {},
+		chat_mode = true,
+	}, function(body, err)
+		if err then
+			if callback then
+				callback(nil, err)
+			end
+			return
+		end
+
+		local ok, json = pcall(vim.fn.json_decode, body)
+		if not ok then
+			if callback then
+				callback(nil, { message = "Failed to decode response" })
+			end
+			return
+		end
+
+		if callback then
+			callback(json, nil)
+		end
+	end)
+end
+
+function Server:apply_code_changes(changes, callback)
+	if not self.enabled or not self.port then
+		return
+	end
+
+	local metadata = get_request_metadata()
+	
+	self:request("ApplyCodeChanges", {
+		metadata = metadata,
+		changes = changes,
+	}, function(body, err)
+		if err then
+			if callback then
+				callback(false, err)
+			end
+			return
+		end
+
+		local ok, json = pcall(vim.fn.json_decode, body)
+		if not ok then
+			if callback then
+				callback(false, { message = "Failed to decode response" })
+			end
+			return
+		end
+
+		if callback then
+			callback(true, json)
+		end
+	end)
+end
+
 function Server:get_chat_ports()
 	self:request("GetProcesses", {
 		metadata = get_request_metadata(),

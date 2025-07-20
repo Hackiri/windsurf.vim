@@ -1,0 +1,39 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: check-merge-conflict
+    - id: check-added-large-files
+    - id: check-case-conflict
+    - id: mixed-line-ending
+
+- repo: https://github.com/JohnnyMorganz/StyLua
+  rev: v2.0.2
+  hooks:
+    - id: stylua-system
+      files: \.lua$
+      args: [--config-path=.stylua.toml]
+
+- repo: https://github.com/Calinou/pre-commit-luacheck
+  rev: v1.0.0
+  hooks:
+    - id: luacheck
+      args: [--config=.luacheckrc]
+
+- repo: https://github.com/pre-commit/mirrors-prettier
+  rev: v4.0.0-alpha.8
+  hooks:
+    - id: prettier
+      files: \.(md|json|yml|yaml)$
+
+- repo: local
+  hooks:
+    - id: windsurf-lua-lint
+      name: Windsurf Lua Lint
+      entry: luacheck
+      language: system
+      files: ^lua/.*\.lua$
+      args: [--globals=vim]
