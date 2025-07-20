@@ -10,7 +10,7 @@ local function open_buffer(url, callback)
 	local bufnr = vim.api.nvim_create_buf(false, true)
 	assert(bufnr ~= 0, "failed to create buffer")
 
-	vim.bo[bufnr].bufhidden = 'wipe'
+	vim.bo[bufnr].bufhidden = "wipe"
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {
 		url,
 		"",

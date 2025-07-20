@@ -1,5 +1,5 @@
-local enums = require("codeium.enums")
 local config = require("codeium.config")
+local enums = require("codeium.enums")
 local io = require("codeium.io")
 local M = {}
 

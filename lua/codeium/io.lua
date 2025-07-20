@@ -1,9 +1,9 @@
 local uv = vim.loop
-local log = require("codeium.log")
-local Path = require("plenary.path")
 local Job = require("plenary.job")
-local curl = require("plenary.curl")
+local Path = require("plenary.path")
 local config = require("codeium.config")
+local curl = require("plenary.curl")
+local log = require("codeium.log")
 local default_mod = 438 -- 666
 
 local M = {}
@@ -343,7 +343,7 @@ function M.gunzip(path, callback)
 			vim.o.shell = "powershell"
 		end
 		vim.o.shellcmdflag =
-		"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+			"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 		vim.o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
 		vim.o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
 		vim.o.shellquote = ""
@@ -402,9 +402,9 @@ function M.post(url, params)
 	local tmpfname = os.tmpname()
 
 	if type(params.body) == "table" then
-		local f = io.open(tmpfname, 'w+')
+		local f = io.open(tmpfname, "w+")
 		if f == nil then
-			log.error('Cannot open temporary message file: ' .. tmpfname)
+			log.error("Cannot open temporary message file: " .. tmpfname)
 			return
 		end
 		f:write(vim.fn.json_encode(params.body))

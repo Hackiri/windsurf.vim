@@ -78,43 +78,42 @@ You can globaly enable or disable Codeium Completion with `:Codeium Toggle` comm
 - `config_path`: the path to the config file, used to store the API key.
 - `bin_path`: the path to the directory where the Windsurf server will be downloaded to.
 - `api`: information about the API server to use:
-  - `host`: the hostname. Example: `"codeium.example.com"`. Required when using enterprise mode
-  - `port`: the port. Defaults to `443`
-  - `path`: the path prefix to the API server. Default for enterprise: `"/_route/api_server"`
-  - `portal_url`: the portal URL to use (for enterprise mode). Defaults to `host:port`
+    - `host`: the hostname. Example: `"codeium.example.com"`. Required when using enterprise mode
+    - `port`: the port. Defaults to `443`
+    - `path`: the path prefix to the API server. Default for enterprise: `"/_route/api_server"`
+    - `portal_url`: the portal URL to use (for enterprise mode). Defaults to `host:port`
 - `enterprise_mode`: enable enterprise mode
 - `detect_proxy`: enable or disable proxy detection
 - `enable_chat`: enable chat functionality
 - `enable_cmp_source`: defaults to true. Set `false` to disable registering a `cmp` source
 - `virtual_text`: configuration for showing completions in virtual text
-  - `enabled`: defaults to `false`. Set `true` to enable the virtual text feature
-  - `filetypes`: A mapping of filetype to true or false, to enable virtual text
-  - `default_filetype_enabled`: Whether to enable virtual text of not for types not listed in `filetypes`.
-  - `manual`: Set `true` to only trigger Codeium using a manual Lua function call
-  - `idle_delay`: defaults to `75`. Time in ms to wait before requesting completions after typing stops.
-  - `virtual_text_priority`: defaults to `65535`. Priority of the virtual text
-  - `map_keys`: defaults to `true`. Set `false` to not set any key bindings for completions
-  - `accept_fallback`: Emulate pressing this key when using the accept key binding but there is no completion. Defaults
-  to "\t"
-  - `key_bindings`: key bindings for accepting and cycling through completions
-    - `accept`: key binding for accepting a completion, default is `<Tab>`
-    - `accept_word`: key binding for accepting only the next word, default is not set
-    - `accept_line`: key binding for accepting only the next line, default is not set
-    - `clear`: key binding for clearing the virtual text, default is not set
-    - `next`: key binding for cycling to the next completion, default is `<M-]>`
-    - `prev`: key binding for cycling to the previous completion, default is `<M-[>`
+    - `enabled`: defaults to `false`. Set `true` to enable the virtual text feature
+    - `filetypes`: A mapping of filetype to true or false, to enable virtual text
+    - `default_filetype_enabled`: Whether to enable virtual text of not for types not listed in `filetypes`.
+    - `manual`: Set `true` to only trigger Codeium using a manual Lua function call
+    - `idle_delay`: defaults to `75`. Time in ms to wait before requesting completions after typing stops.
+    - `virtual_text_priority`: defaults to `65535`. Priority of the virtual text
+    - `map_keys`: defaults to `true`. Set `false` to not set any key bindings for completions
+    - `accept_fallback`: Emulate pressing this key when using the accept key binding but there is no completion. Defaults
+      to "\t"
+    - `key_bindings`: key bindings for accepting and cycling through completions
+        - `accept`: key binding for accepting a completion, default is `<Tab>`
+        - `accept_word`: key binding for accepting only the next word, default is not set
+        - `accept_line`: key binding for accepting only the next line, default is not set
+        - `clear`: key binding for clearing the virtual text, default is not set
+        - `next`: key binding for cycling to the next completion, default is `<M-]>`
+        - `prev`: key binding for cycling to the previous completion, default is `<M-[>`
 - `workspace_root`:
-  - `use_lsp`: Use Neovim's LSP support to find the workspace root, if possible.
-  -	`paths`: paths to files that indicate a workspace root when not using the LSP support
-  - `find_root`: An optional function that the plugin will call to find the workspace root.
+    - `use_lsp`: Use Neovim's LSP support to find the workspace root, if possible.
+    - `paths`: paths to files that indicate a workspace root when not using the LSP support
+    - `find_root`: An optional function that the plugin will call to find the workspace root.
 - `tools`: paths to binaries used by the plugin:
+    - `uname`: not needed on Windows, defaults given.
+    - `uuidgen`
+    - `curl`:
+    - `gzip`: not needed on Windows, default implemenation given using powershell.exe Expand-Archive instead
 
-  - `uname`: not needed on Windows, defaults given.
-  - `uuidgen`
-  - `curl`:
-  - `gzip`: not needed on Windows, default implemenation given using powershell.exe Expand-Archive instead
-
-  - `language_server`: The path to the language server downloaded from the [official source.](https://github.com/Exafunction/codeium/releases/tag/language-server-v1.1.32)
+    - `language_server`: The path to the language server downloaded from the [official source.](https://github.com/Exafunction/codeium/releases/tag/language-server-v1.1.32)
 
 - `wrapper`: the path to a wrapper script/binary that is used to execute any
   binaries not listed under `tools`. This is primarily useful for NixOS, where
@@ -204,7 +203,7 @@ require("codeium").setup({
         -- Set to false to disable all key bindings for managing completions.
         map_keys = true,
         -- The key to press when hitting the accept keybinding but no completion is showing.
-        -- Defaults to \t normally or <c-n> when a popup is showing. 
+        -- Defaults to \t normally or <c-n> when a popup is showing.
         accept_fallback = nil,
         -- Key bindings for managing completions in virtual text mode.
         key_bindings = {
@@ -252,7 +251,7 @@ should use virtual text.
 ```lua
 require('codeium.virtual_text').setup({
     virtual_text = {
-        filetypes = { 
+        filetypes = {
             python = true,
             markdown = false
         },
@@ -263,7 +262,7 @@ require('codeium.virtual_text').setup({
 
 ### Show Windsurf status in statusline
 
-When using virtual text, Windsurf status can be generated by calling `require('codeium.virtual_text').status_string()`. 
+When using virtual text, Windsurf status can be generated by calling `require('codeium.virtual_text').status_string()`.
 It produces a 3 char long string with Windsurf status:
 
 - `'3/8'` - third suggestion out of 8
@@ -272,13 +271,13 @@ It produces a 3 char long string with Windsurf status:
 
 In order to show it in status line add following line to your `.vimrc`:
 
-```set statusline+=%3{v:lua.require('codeium.virtual_text').status_string()}```
+`set statusline+=%3{v:lua.require('codeium.virtual_text').status_string()}`
 
 Please check `:help statusline` for further information about building statusline in VIM.
 
 The `status_string` function can also be used with other statusline plugins.
 You can call the `set_statusbar_refresh` function to customize how the plugin refreshes the
-status bar. 
+status bar.
 
 For example, this sets up the plugin with lualine:
 
@@ -315,7 +314,7 @@ end
 
 ### Workspace Root Directory
 
-The plugin uses a few techniques to find the workspace root directory, which helps to inform the autocomplete and chat context. 
+The plugin uses a few techniques to find the workspace root directory, which helps to inform the autocomplete and chat context.
 
 1. Call the optional `workspace_root.find_root` function, if provided. This is described below.
 2. Query Neovim's built-in LSP support for the workspace root, if `workspace_root.use_lsp` is not set to `false`.

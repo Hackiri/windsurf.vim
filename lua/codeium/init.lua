@@ -23,7 +23,7 @@ function M.setup(options)
 		end
 	end)
 	health.register(M.s)
-	
+
 	-- Initialize all advanced systems
 	providers.setup()
 	history.setup()
@@ -31,7 +31,7 @@ function M.setup(options)
 	rag.setup(options.rag_service or {})
 	tools.setup(options.tools or {})
 	sidebar.setup()
-	
+
 	-- Setup key bindings
 	M.setup_keymaps()
 
@@ -151,12 +151,12 @@ function M.setup(options)
 					end
 				end
 			end
-			
+
 			local context = {
 				current_file = vim.api.nvim_buf_get_name(0),
 				cursor_line = vim.api.nvim_win_get_cursor(0)[1],
 			}
-			
+
 			diff_module.apply_with_confirmation(last_response, context)
 		else
 			notify.warn("No code suggestions available to edit")
@@ -259,16 +259,16 @@ end
 --- Setup key bindings
 function M.setup_keymaps()
 	local opts = { noremap = true, silent = true }
-	
+
 	-- Leader key mappings (similar to avante.nvim)
 	vim.keymap.set("n", "<leader>aa", function()
 		require("codeium.views.sidebar").open()
 	end, vim.tbl_extend("force", opts, { desc = "Show Windsurf AI sidebar" }))
-	
+
 	vim.keymap.set("n", "<leader>at", function()
 		require("codeium.views.sidebar").toggle()
 	end, vim.tbl_extend("force", opts, { desc = "Toggle Windsurf AI sidebar" }))
-	
+
 	vim.keymap.set("n", "<leader>af", function()
 		local sidebar = require("codeium.views.sidebar")
 		if sidebar.get_state().is_open then
@@ -278,7 +278,7 @@ function M.setup_keymaps()
 			sidebar.focus_input()
 		end
 	end, vim.tbl_extend("force", opts, { desc = "Focus Windsurf AI input" }))
-	
+
 	vim.keymap.set("n", "<leader>an", function()
 		vim.ui.input({ prompt = "Ask Windsurf AI: " }, function(input)
 			if input and input ~= "" then
@@ -286,33 +286,33 @@ function M.setup_keymaps()
 			end
 		end)
 	end, vim.tbl_extend("force", opts, { desc = "New ask" }))
-	
+
 	vim.keymap.set("n", "<leader>ac", function()
 		require("codeium.views.sidebar").add_file()
 	end, vim.tbl_extend("force", opts, { desc = "Add current buffer to context" }))
-	
+
 	-- Advanced features
 	vim.keymap.set("n", "<leader>ap", function()
 		require("codeium.providers").show_provider_menu()
 	end, vim.tbl_extend("force", opts, { desc = "Switch AI provider" }))
-	
+
 	vim.keymap.set("n", "<leader>ah", function()
 		require("codeium.history").show_session_menu()
 	end, vim.tbl_extend("force", opts, { desc = "Show session history" }))
-	
+
 	vim.keymap.set("n", "<leader>ae", function()
 		vim.cmd("WindsurfEdit")
 	end, vim.tbl_extend("force", opts, { desc = "Edit code suggestions" }))
-	
+
 	vim.keymap.set("n", "<leader>ar", function()
 		require("codeium.views.sidebar").retry_last()
 	end, vim.tbl_extend("force", opts, { desc = "Retry last message" }))
-	
+
 	vim.keymap.set("n", "<leader>aS", function()
 		-- Stop current AI request (placeholder for now)
 		notify.info("Stop AI request (not implemented yet)")
 	end, vim.tbl_extend("force", opts, { desc = "Stop AI request" }))
-	
+
 	-- Advanced RAG, Web Search, and Tools features
 	vim.keymap.set("n", "<leader>aw", function()
 		vim.ui.input({ prompt = "Web search: " }, function(query)
@@ -321,34 +321,34 @@ function M.setup_keymaps()
 			end
 		end)
 	end, vim.tbl_extend("force", opts, { desc = "Web search" }))
-	
+
 	vim.keymap.set("n", "<leader>aR", function()
 		vim.cmd("WindsurfRAG")
 	end, vim.tbl_extend("force", opts, { desc = "RAG service menu" }))
-	
+
 	vim.keymap.set("n", "<leader>aT", function()
 		vim.cmd("WindsurfTools")
 	end, vim.tbl_extend("force", opts, { desc = "Tools menu" }))
-	
+
 	vim.keymap.set("n", "<leader>aW", function()
 		vim.cmd("WindsurfWebProvider")
 	end, vim.tbl_extend("force", opts, { desc = "Web search provider" }))
-	
+
 	-- Enhanced suggestion handling
 	vim.keymap.set("n", "<M-l>", function()
 		require("codeium.views.sidebar").apply_code_smart()
 	end, vim.tbl_extend("force", opts, { desc = "Accept AI suggestion (smart)" }))
-	
+
 	vim.keymap.set("n", "<M-]>", function()
 		-- Next suggestion (placeholder)
 		notify.info("Next suggestion (not implemented yet)")
 	end, vim.tbl_extend("force", opts, { desc = "Next suggestion" }))
-	
+
 	vim.keymap.set("n", "<M-[>", function()
 		-- Previous suggestion (placeholder)
 		notify.info("Previous suggestion (not implemented yet)")
 	end, vim.tbl_extend("force", opts, { desc = "Previous suggestion" }))
-	
+
 	vim.keymap.set("n", "<C-]>", function()
 		-- Dismiss suggestion (placeholder)
 		notify.info("Dismiss suggestion (not implemented yet)")

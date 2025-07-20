@@ -173,7 +173,7 @@ local function completion_inserter(current_completion, insert_text)
 
 	server:accept_completion(current_completion.completion.completionId)
 
-	return '<C-g>u' .. delete_range .. insert_text .. cursor_text
+	return "<C-g>u" .. delete_range .. insert_text .. cursor_text
 end
 
 function M.accept()
@@ -248,10 +248,7 @@ local function render_current_completion()
 		end
 		local text = part.text
 
-		if
-			(part.type == "COMPLETION_PART_TYPE_INLINE" and idx == 1)
-			or part.type == "COMPLETION_PART_TYPE_INLINE_MASK"
-		then
+		if (part.type == "COMPLETION_PART_TYPE_INLINE" and idx == 1) or part.type == "COMPLETION_PART_TYPE_INLINE_MASK" then
 			local completion_prefix = part.prefix or ""
 			local completion_line = completion_prefix .. text
 			local full_line = vim.fn.getline(row)

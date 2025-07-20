@@ -1,11 +1,11 @@
-local versions = require("codeium.versions")
 local config = require("codeium.config")
+local enums = require("codeium.enums")
 local io = require("codeium.io")
 local log = require("codeium.log")
-local update = require("codeium.update")
 local notify = require("codeium.notify")
+local update = require("codeium.update")
 local util = require("codeium.util")
-local enums = require("codeium.enums")
+local versions = require("codeium.versions")
 
 local api_key = nil
 local status = {
@@ -510,7 +510,7 @@ function Server:send_chat_message(message, context, callback)
 
 	local metadata = get_request_metadata()
 	local document = nil
-	
+
 	-- Get current document context if available
 	local bufnr = vim.api.nvim_get_current_buf()
 	if vim.api.nvim_buf_is_valid(bufnr) then
@@ -521,7 +521,7 @@ function Server:send_chat_message(message, context, callback)
 			local text = table.concat(lines, util.get_newline(bufnr))
 			local filetype = vim.bo.filetype
 			local language = enums.languages[filetype] or enums.languages.unspecified
-			
+
 			document = {
 				editor_language = filetype,
 				language = language,
@@ -573,7 +573,7 @@ function Server:apply_code_changes(changes, callback)
 	end
 
 	local metadata = get_request_metadata()
-	
+
 	self:request("ApplyCodeChanges", {
 		metadata = metadata,
 		changes = changes,

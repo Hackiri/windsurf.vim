@@ -1,7 +1,7 @@
 local config = require("codeium.config")
-local versions = require("codeium.versions")
 local io = require("codeium.io")
 local notify = require("codeium.notify")
+local versions = require("codeium.versions")
 local M = {}
 
 local cached = nil
@@ -71,10 +71,10 @@ function M.validate(callback)
 					end
 					notify.error(
 						stamp
-						.. " does not match the expected Codeium server stamp of "
-						.. versions.extension_stamp
-						.. ". Please update to: https://github.com/Exafunction/codeium/releases/tag/language-server-v"
-						.. versions.extension
+							.. " does not match the expected Codeium server stamp of "
+							.. versions.extension_stamp
+							.. ". Please update to: https://github.com/Exafunction/codeium/releases/tag/language-server-v"
+							.. versions.extension
 					)
 					callback(nil)
 					return
@@ -83,7 +83,7 @@ function M.validate(callback)
 
 			notify.warn(
 				"Codeium.nvim: the version of the Codeium server could not be determined, make sure it matches "
-				.. versions.extension
+					.. versions.extension
 			)
 			callback(nil)
 		end,
