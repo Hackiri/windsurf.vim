@@ -361,7 +361,7 @@ function M.handle_ai_response(response, err)
 	end
 
 	local ai_response = ""
-	
+
 	-- Debug: Print response structure to help identify the correct format
 	if response then
 		print("[DEBUG] Response type:", type(response))
@@ -370,7 +370,7 @@ function M.handle_ai_response(response, err)
 			print("[DEBUG] Full response:", vim.inspect(response))
 		end
 	end
-	
+
 	-- Try multiple possible response formats
 	if response and response.completionItems and #response.completionItems > 0 then
 		-- Standard completion format
@@ -392,7 +392,8 @@ function M.handle_ai_response(response, err)
 		ai_response = response
 	else
 		-- Fallback with more detailed error info
-		ai_response = "I received your message but couldn't parse the response format. Response type: " .. type(response or "nil")
+		ai_response = "I received your message but couldn't parse the response format. Response type: "
+			.. type(response or "nil")
 		if response and type(response) == "table" then
 			ai_response = ai_response .. ". Available keys: " .. table.concat(vim.tbl_keys(response), ", ")
 		end
@@ -402,7 +403,7 @@ function M.handle_ai_response(response, err)
 	if ai_response:match("Response type:") then
 		ai_response = "Debug info printed to console. Please check :messages for response format details."
 	end
-	
+
 	M.add_message("assistant", ai_response)
 
 	-- Check if response contains code suggestions and store them
