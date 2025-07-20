@@ -320,7 +320,17 @@ function M.process_user_message(content)
 
 	-- Format context for AI prompt
 	local formatted_context = context.format_context_for_prompt(message_context)
-	local full_message = formatted_context .. "\n\nUser Request: " .. content
+
+	-- Enhance prompt for Windsurf API to avoid "too short" rejection
+	local enhanced_content = content
+	if #content < 20 and not content:match("@") then
+		-- Add context to short prompts to make them more suitable for code assistance
+		enhanced_content = "As a coding assistant, please help with: "
+			.. content
+			.. "\n\nPlease provide a helpful response related to software development, coding practices, or technical assistance."
+	end
+
+	local full_message = formatted_context .. "\n\nUser Request: " .. enhanced_content
 
 	-- Get conversation history from history system
 	local conversation_history = history.get_messages_for_context(5)
@@ -378,6 +388,18 @@ function M.handle_ai_response(response, err)
 	elseif response and response.completion and response.completion.text then
 		-- Alternative completion format
 		ai_response = response.completion.text
+	elseif response and response.state and response.state.message then
+		-- Windsurf state message format (API rejection/info)
+		if response.state.state == "CODEIUM_STATE_INACTIVE" then
+			ai_response = "💡 The AI suggests asking a more specific, code-related question. Try asking about:\n"
+				.. "• How to improve this code\n"
+				.. "• Explain a function or algorithm\n"
+				.. "• Debug an error or issue\n"
+				.. "• Code review or optimization suggestions\n\n"
+				.. "Or use @file to reference specific code files for context."
+		else
+			ai_response = "ℹ️ " .. response.state.message
+		end
 	elseif response and response.text then
 		-- Direct text format
 		ai_response = response.text
