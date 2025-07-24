@@ -382,8 +382,26 @@ function M.handle_ai_response(response, err)
 	end
 
 	-- Try multiple possible response formats
-	if response and response.completionItems and #response.completionItems > 0 then
-		-- Standard completion format
+	-- First check for filteredCompletionItems (which is the actual response structure)
+	if response and response.filteredCompletionItems and #response.filteredCompletionItems > 0 then
+		-- Find the first completion that has actual content (not just filter reasons)
+		for _, item in ipairs(response.filteredCompletionItems) do
+			if
+				item.completion
+				and item.completion.originalText
+				and item.completion.originalText ~= ""
+				and not item.completion.originalText:match("^<|.*|>$")
+			then
+				ai_response = item.completion.originalText
+				break
+			end
+		end
+		-- If no valid completion found, try to use the first one anyway
+		if ai_response == "" and response.filteredCompletionItems[1] and response.filteredCompletionItems[1].completion then
+			ai_response = response.filteredCompletionItems[1].completion.originalText or ""
+		end
+	elseif response and response.completionItems and #response.completionItems > 0 then
+		-- Standard completion format (fallback)
 		ai_response = response.completionItems[1].completion.text
 	elseif response and response.completion and response.completion.text then
 		-- Alternative completion format
