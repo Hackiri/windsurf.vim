@@ -2,6 +2,9 @@
 # Lua
 *.so
 
+PRD.md
+plan.md
+
 # Node modules
 node_modules/
 npm-debug.log*
